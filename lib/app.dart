@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/branding/app_info.dart';
 import 'core/branding/brand_mark.dart';
 import 'core/money.dart';
+import 'core/localization/app_locale_controller.dart';
+import 'l10n/generated/app_localizations.dart';
 import 'core/routing/app_router.dart';
 import 'core/security/screen_security.dart';
 import 'core/security/unlock_method.dart';
@@ -299,9 +301,14 @@ class _XpencAppState extends ConsumerState<XpencApp>
     // waits on. ScreenSecurity itself no-ops if nothing actually changed.
     unawaited(ScreenSecurity.apply(ref.watch(preventScreenshotsProvider)));
 
+    final selectedLocale = ref.watch(appLocaleProvider).locale;
+
     return MaterialApp.router(
       title: AppInfo.name,
       debugShowCheckedModeBanner: false,
+      locale: selectedLocale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       // A style that only exists in one brightness (Glass) stores the same
       // palette in both slots, so `themeMode` alone decides.
       // Glass's palette comes from its background, in both slots;
@@ -440,7 +447,7 @@ class _ScreenshotAllowedTag extends StatelessWidget {
       child: GestureDetector(
         onTap: () => appRouter.push('/more/settings'),
         child: Text(
-          'Screenshots allowed',
+          AppLocalizations.of(context).screenshotsAllowed,
           style: theme.textTheme.labelSmall?.copyWith(
             color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
           ),
