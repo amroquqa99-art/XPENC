@@ -71,6 +71,17 @@ class AppLocaleController extends ChangeNotifier {
   }
 }
 
+/// Matches a platform locale to a catalog; never loads an unsupported locale.
+Locale resolvedNotificationLocale() {
+  final explicit = appLocaleController.locale;
+  if (explicit != null) return explicit;
+  final device = WidgetsBinding.instance.platformDispatcher.locale;
+  for (final supported in AppLocalizations.supportedLocales) {
+    if (supported.languageCode == device.languageCode) return supported;
+  }
+  return AppLocalizations.supportedLocales.first;
+}
+
 String localeIdentifier(Locale locale) =>
     locale.toLanguageTag().replaceAll('-', '_');
 
