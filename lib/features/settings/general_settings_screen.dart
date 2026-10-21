@@ -85,7 +85,17 @@ class GeneralSettingsScreen extends ConsumerWidget {
                           color: cs.onSurfaceVariant),
                     ],
                   ),
-                  onTap: () => showLanguagePicker(context),
+                  onTap: () async {
+                    final oldLanguage = appLocaleController.languageCode;
+                    await showLanguagePicker(context);
+                    if (!context.mounted || oldLanguage == appLocaleController.languageCode) return;
+                    final notifications = ref.read(notificationServiceProvider);
+                    await notifications.syncReminders();
+                    await notifications.syncRecurringNotifications();
+                    await notifications.syncCreditCardReminders();
+                    await notifications.syncExpenseReminder();
+                    await notifications.syncQuickAddNotification();
+                  },
                 ),
                 Divider(height: 1, indent: 60, color: cs.outline),
                 AppSwitchListTile(
