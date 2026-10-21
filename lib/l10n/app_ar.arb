@@ -264,5 +264,42 @@
   "postsToTitle": "تسجيل المعاملة في",
   "firstAccount": "الحساب الأول",
   "postToTitle": "التسجيل في",
-  "firstAccountDescription": "الحساب الموجود في بداية قائمة الحسابات."
+  "firstAccountDescription": "الحساب الموجود في بداية قائمة الحسابات.",
+  "navTransactions": "المعاملات",
+  "navPersons": "الأشخاص",
+  "navMore": "المزيد",
+  "navBudgets": "الميزانيات",
+  "navAccounts": "الحسابات",
+  "navStats": "الإحصاءات",
+  "navPayees": "جهات الدفع",
+  "navAdd": "إضافة",
+  "navSettled": "المسوّاة",
+  "navReviewInbox": "صندوق المراجعة",
+  "navArchived": "المؤرشفة",
+  "navAddPerson": "إضافة شخص",
+  "navToday": "اليوم",
+  "navNewReminder": "تذكير جديد",
+  "navAbout": "حول {app}",
+  "@navAbout": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "navChangeMonth": "تغيير الشهر",
+  "navFilters": "عوامل التصفية",
+  "navSearch": "بحث",
+  "navCloseSearch": "إغلاق البحث",
+  "navSlideToAction": "اسحب نحو الإجراء المطلوب، أو أفلت عند × للإلغاء",
+  "navReleaseToCancel": "أفلت للإلغاء",
+  "navPinned": "ثابت",
+  "navTapToChange": "اضغط للتغيير",
+  "navShowLabels": "إظهار عناوين الأقسام",
+  "navShowLabelsSubtitle": "إظهار أسماء الأقسام أسفل الأيقونات. عند الإيقاف تُعرض الأيقونات وحدها.",
+  "navBottomSpacing": "المسافة السفلية",
+  "navBottomSpacingSubtitle": "قد تتداخل أزرار النظام في بعض الأجهزة مع شريط التطبيق أو لوحة رمز القفل. زد المسافة إذا حُجب أي عنصر.",
+  "navExtraSpace": "مسافة إضافية",
+  "navOff": "إيقاف",
+  "navCustomizeDescription": "الرئيسية والمزيد ثابتان. اختر القسمين اللذين يظهران بجانب زر ➕."
 }
