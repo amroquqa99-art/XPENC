@@ -245,5 +245,24 @@
       }
     }
   },
-  "quickAddSaveFailed": "Couldn't save the transaction — nothing was recorded."
+  "quickAddSaveFailed": "Couldn't save the transaction — nothing was recorded.",
+  "notificationSettingsDescription": "Budget alerts and payment reminders.",
+  "dailyReminderSettingsTitle": "Daily expense reminder",
+  "dailyReminderEnabledDescription": "Daily reminder at {time} to record your spending.",
+  "@dailyReminderEnabledDescription": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dailyReminderDisabledDescription": "An optional reminder to record spending, unrelated to a specific bill.",
+  "timeTitle": "Time",
+  "quickAddFromNotificationTitle": "Quick add from notification",
+  "quickAddFromNotificationDescription": "Reply to a notification with an amount to record a transaction instantly, without choosing a category.",
+  "enableNotificationsFirst": "Enable notifications above first.",
+  "postsToTitle": "Posts to",
+  "firstAccount": "First account",
+  "postToTitle": "Post to",
+  "firstAccountDescription": "The first account in your Accounts list."
 }
