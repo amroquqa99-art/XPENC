@@ -67,5 +67,6 @@
   "paymentRemindersChannel": "تذكيرات المدفوعات",
   "detectedTransactionsChannel": "معاملات مكتشفة",
   "dailyExpenseReminderChannel": "تذكير يومي بالمصاريف",
-  "quickAddChannel": "اختصار الإضافة السريعة"
+  "quickAddChannel": "اختصار الإضافة السريعة",
+  "languageSaveFailed": "تعذّر حفظ اللغة المختارة"
 }
