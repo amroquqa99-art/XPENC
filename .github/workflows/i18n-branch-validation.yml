@@ -6,6 +6,10 @@ on:
       - feat/contributor-friendly-i18n-ar
   workflow_dispatch:
 
+concurrency:
+  group: i18n-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate:
     runs-on: ubuntu-latest
