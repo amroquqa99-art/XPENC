@@ -60,6 +60,8 @@ Everything lives in the app's private on-device SQLite database. No SMS permissi
 
 ## Contributing
 
+**Translations / اللغات:** [Add a language](docs/TRANSLATING.md) · [دليل إضافة لغة جديدة](docs/TRANSLATING_AR.md). Languages live in Flutter ARB files; no screen code edits are needed to register a new locale.
+
 Contributions are welcome — the highest-impact one is [adding an SMS template for your bank](../../issues/new?template=bank_support.yml).
 
 📖 [CONTRIBUTING.md](CONTRIBUTING.md) (setup & PR checklist) · 🤝 [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) · 📦 [docs/RELEASING.md](docs/RELEASING.md)
