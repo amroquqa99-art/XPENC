@@ -26,19 +26,25 @@ Future<void> showLanguagePicker(BuildContext context) async {
               style: Theme.of(sheetContext).textTheme.titleLarge,
             ),
           ),
-          RadioListTile<String>(
-            title: Text(l10n.followSystemLanguage),
-            value: 'system',
+          RadioGroup<String>(
             groupValue: selected,
-            onChanged: (value) => Navigator.pop(sheetContext, value),
-          ),
-          for (final locale in AppLocalizations.supportedLocales)
-            RadioListTile<String>(
-              title: Text(nativeLocaleLabel(locale)),
-              value: localeIdentifier(locale),
-              groupValue: selected,
-              onChanged: (value) => Navigator.pop(sheetContext, value),
+            onChanged: (value) {
+              if (value != null) Navigator.pop(sheetContext, value);
+            },
+            child: Column(
+              children: [
+                RadioListTile<String>(
+                  title: Text(l10n.followSystemLanguage),
+                  value: 'system',
+                ),
+                for (final locale in AppLocalizations.supportedLocales)
+                  RadioListTile<String>(
+                    title: Text(nativeLocaleLabel(locale)),
+                    value: localeIdentifier(locale),
+                  ),
+              ],
             ),
+          ),
         ],
       ),
     ),
