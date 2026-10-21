@@ -19,8 +19,14 @@ class AppLocaleController extends ChangeNotifier {
   String? _languageCode;
 
   String? get languageCode => _languageCode;
-  Locale? get locale =>
-      _languageCode == null ? null : Locale(_languageCode!);
+  Locale? get locale {
+    final selected = _languageCode;
+    if (selected == null) return null;
+    for (final supported in AppLocalizations.supportedLocales) {
+      if (localeIdentifier(supported) == selected) return supported;
+    }
+    return null;
+  }
 
   bool get followsSystem => _languageCode == null;
 
@@ -44,7 +50,7 @@ class AppLocaleController extends ChangeNotifier {
   }
 
   bool _supported(String code) => AppLocalizations.supportedLocales
-      .any((locale) => locale.languageCode == code);
+      .any((locale) => localeIdentifier(locale) == code);
 
   /// Pass null to follow Android/iOS system language.
   Future<void> setLanguage(String? code) async {
@@ -64,6 +70,9 @@ class AppLocaleController extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+String localeIdentifier(Locale locale) =>
+    locale.toLanguageTag().replaceAll('-', '_');
 
 String nativeLocaleLabel(Locale locale) => switch (locale.languageCode) {
   'ar' => 'العربية',
