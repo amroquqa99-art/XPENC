@@ -245,5 +245,24 @@
       }
     }
   },
-  "quickAddSaveFailed": "تعذّر حفظ المعاملة؛ لم يُسجّل أي مبلغ."
+  "quickAddSaveFailed": "تعذّر حفظ المعاملة؛ لم يُسجّل أي مبلغ.",
+  "notificationSettingsDescription": "تنبيهات الميزانية وتذكيرات المدفوعات.",
+  "dailyReminderSettingsTitle": "تذكير يومي بالمصاريف",
+  "dailyReminderEnabledDescription": "تذكير يومي الساعة {time} لتسجيل مصروفاتك.",
+  "@dailyReminderEnabledDescription": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dailyReminderDisabledDescription": "تذكير اختياري لتسجيل المصروفات اليومية، وليس لسداد فاتورة محددة.",
+  "timeTitle": "الوقت",
+  "quickAddFromNotificationTitle": "إضافة سريعة من الإشعار",
+  "quickAddFromNotificationDescription": "ردّ على الإشعار بمبلغ لتسجيل المعاملة فورًا دون تحديد فئة.",
+  "enableNotificationsFirst": "فعّل الإشعارات أولًا من الخيار أعلاه.",
+  "postsToTitle": "تسجيل المعاملة في",
+  "firstAccount": "الحساب الأول",
+  "postToTitle": "التسجيل في",
+  "firstAccountDescription": "الحساب الموجود في بداية قائمة الحسابات."
 }
