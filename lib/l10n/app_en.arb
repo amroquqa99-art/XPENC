@@ -264,5 +264,42 @@
   "postsToTitle": "Posts to",
   "firstAccount": "First account",
   "postToTitle": "Post to",
-  "firstAccountDescription": "The first account in your Accounts list."
+  "firstAccountDescription": "The first account in your Accounts list.",
+  "navTransactions": "Transactions",
+  "navPersons": "Persons",
+  "navMore": "More",
+  "navBudgets": "Budgets",
+  "navAccounts": "Accounts",
+  "navStats": "Stats",
+  "navPayees": "Payees",
+  "navAdd": "Add",
+  "navSettled": "Settled",
+  "navReviewInbox": "Review Inbox",
+  "navArchived": "Archived",
+  "navAddPerson": "Add person",
+  "navToday": "Today",
+  "navNewReminder": "New reminder",
+  "navAbout": "About {app}",
+  "@navAbout": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "navChangeMonth": "Change month",
+  "navFilters": "Filters",
+  "navSearch": "Search",
+  "navCloseSearch": "Close search",
+  "navSlideToAction": "Slide to an action · release on × to cancel",
+  "navReleaseToCancel": "Release to cancel",
+  "navPinned": "Fixed",
+  "navTapToChange": "Tap to change",
+  "navShowLabels": "Show labels",
+  "navShowLabelsSubtitle": "Show each item's name under its icon. Off keeps icons only.",
+  "navBottomSpacing": "Bottom spacing",
+  "navBottomSpacingSubtitle": "On some phones, the system navigation buttons overlap the app's bottom bar or PIN keypad. Increase this spacing if anything is obscured.",
+  "navExtraSpace": "Extra space",
+  "navOff": "Off",
+  "navCustomizeDescription": "Dashboard and More stay fixed. Choose the two sections beside the ➕ button."
 }
