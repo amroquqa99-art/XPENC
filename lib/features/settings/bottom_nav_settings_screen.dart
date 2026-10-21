@@ -3,9 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/routing/app_router.dart' show appRouter;
 import '../../core/routing/app_shell.dart'
-    show basicModeHiddenCatalogIds, bottomNavCatalogLabels;
+    show basicModeHiddenCatalogIds, bottomNavCatalogLabels, localizedNavLabel;
 import '../../core/widgets/app_surfaces.dart';
 import '../../data/providers.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../../data/tables.dart' show AppMode;
 
 /// Pick which of the 7 catalog destinations occupy the two configurable
@@ -16,6 +17,7 @@ class BottomNavSettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final raw =
         ref.watch(settingsProvider).valueOrNull?.bottomNavSlots ??
@@ -46,7 +48,7 @@ class BottomNavSettingsScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppTopBar(title: const Text('Customize bottom nav')),
+      appBar: AppTopBar(title: Text(l10n.customizeBottomNavTitle)),
       body: ListView(
         // Explicit padding drops ListView's nav-bar inset; re-add it (#137).
         padding: EdgeInsets.fromLTRB(
@@ -57,42 +59,39 @@ class BottomNavSettingsScreen extends ConsumerWidget {
         ),
         children: [
           Text(
-            'Dashboard and More always stay put. Pick what goes in the two '
-            'slots next to the ➕ button.',
+            l10n.navCustomizeDescription,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 20),
-          _PinnedRow(label: 'Dashboard'),
+          _PinnedRow(label: l10n.dashboardTitle),
           const SizedBox(height: 8),
           _SlotTile(
-            label: bottomNavCatalogLabels[leftId]!,
+            label: localizedNavLabel(context, bottomNavCatalogLabels[leftId]!),
             onTap: () => pick(true),
           ),
           const SizedBox(height: 8),
           const _AddButtonRow(),
           const SizedBox(height: 8),
           _SlotTile(
-            label: bottomNavCatalogLabels[rightId]!,
+            label: localizedNavLabel(context, bottomNavCatalogLabels[rightId]!),
             onTap: () => pick(false),
           ),
           const SizedBox(height: 8),
-          _PinnedRow(label: 'More'),
+          _PinnedRow(label: l10n.navMore),
           const SizedBox(height: 20),
           AppCard(
             margin: EdgeInsets.zero,
             child: AppSwitchListTile(
-              title: const Text('Show labels'),
-              subtitle: const Text(
-                'Show each item\'s text under its icon. Off keeps icons only.',
-              ),
+              title: Text(l10n.navShowLabels),
+              subtitle: Text(l10n.navShowLabelsSubtitle),
               value: showLabels,
               onChanged: (v) => ref.read(dbProvider).setShowBottomNavLabels(v),
             ),
           ),
           const SizedBox(height: 20),
-          _sectionLabel(context, 'Bottom spacing'),
+          _sectionLabel(context, l10n.navBottomSpacing),
           AppCard(
             margin: EdgeInsets.zero,
             child: Padding(
@@ -101,9 +100,7 @@ class BottomNavSettingsScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'On some phones the on-screen back/home buttons sit over '
-                    'the bottom nav bar or the PIN unlock keypad. Raise this '
-                    'if either looks cut off or hard to tap.',
+                    l10n.navBottomSpacingSubtitle,
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
@@ -113,13 +110,13 @@ class BottomNavSettingsScreen extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Extra space',
+                        l10n.navExtraSpace,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                         ),
                       ),
                       Text(
-                        extraBottomInset == 0 ? 'Off' : '${extraBottomInset}px',
+                        extraBottomInset == 0 ? l10n.navOff : '${extraBottomInset}px',
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
@@ -132,7 +129,7 @@ class BottomNavSettingsScreen extends ConsumerWidget {
                     max: 40,
                     divisions: 10,
                     label: extraBottomInset == 0
-                        ? 'Off'
+                        ? l10n.navOff
                         : '${extraBottomInset}px',
                     onChanged: (v) =>
                         ref.read(dbProvider).setExtraBottomInset(v.round()),
@@ -183,7 +180,7 @@ class _PinnedRow extends StatelessWidget {
           Text(label, style: TextStyle(color: cs.onSurfaceVariant)),
           const Spacer(),
           Text(
-            'Fixed',
+            AppLocalizations.of(context).navPinned,
             style: TextStyle(
               color: cs.onSurfaceVariant,
               fontWeight: FontWeight.w600,
@@ -228,7 +225,7 @@ class _SlotTile extends StatelessWidget {
         trailing: const AppIcon(Icons.chevron_right_rounded),
         onTap: onTap,
         subtitle: Text(
-          'Tap to change',
+          AppLocalizations.of(context).navTapToChange,
           style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),
@@ -261,7 +258,7 @@ class _CatalogPickerSheet extends ConsumerWidget {
               if (!excluded.contains(entry.key) &&
                   !(basic && basicModeHiddenCatalogIds.contains(entry.key)))
                 AppListTile(
-                  title: Text(entry.value),
+                  title: Text(localizedNavLabel(context, entry.value)),
                   onTap: () => Navigator.of(context).pop(entry.key),
                 ),
           ],
