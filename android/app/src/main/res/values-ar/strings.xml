@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">XPENC</string>
+    <string name="widget_total_balance">الرصيد الإجمالي</string>
+    <string name="widget_add_expense">+ مصروف</string>
+    <string name="widget_add_income">+ دخل</string>
+    <string name="widget_description">رصيدك الإجمالي، مع اختصارات لتسجيل المصاريف والدخل.</string>
+    <string name="widget_budgets_title">الميزانيات</string>
+    <string name="widget_budgets_empty">لا توجد ميزانيات بعد. أضف ميزانية من التطبيق.</string>
+    <string name="widget_budgets_description">أبرز الميزانيات مرتبة بحسب اقترابها من الحد المحدد.</string>
+    <string name="widget_quick_add_description">اختصارات سريعة لتسجيل المصروفات أو الدخل.</string>
+    <string name="widget_month_title">هذا الشهر</string>
+    <string name="widget_month_income_label">الدخل</string>
+    <string name="widget_month_expense_label">المصروفات</string>
+    <string name="widget_month_description">إجمالي الدخل والمصروفات لهذا الشهر بنظرة واحدة.</string>
+</resources>
