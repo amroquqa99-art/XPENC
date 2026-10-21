@@ -20,7 +20,7 @@ class NotificationService {
   final _plugin = FlutterLocalNotificationsPlugin();
 
   Future<AppLocalizations> _strings() => AppLocalizations.delegate.load(
-    appLocaleController.locale ?? WidgetsBinding.instance.platformDispatcher.locale,
+    resolvedNotificationLocale(),
   );
   var _ready = false;
 
@@ -655,7 +655,7 @@ Future<void> _handleQuickAddReply(NotificationResponse response) async {
   WidgetsFlutterBinding.ensureInitialized();
   try { await appLocaleController.load(); } catch (_) { /* system fallback */ }
   final l10n = await AppLocalizations.delegate.load(
-    appLocaleController.locale ?? WidgetsBinding.instance.platformDispatcher.locale,
+    resolvedNotificationLocale(),
   );
   final plugin = FlutterLocalNotificationsPlugin();
   await plugin.initialize(
