@@ -67,5 +67,6 @@
   "paymentRemindersChannel": "Payment reminders",
   "detectedTransactionsChannel": "Detected transactions",
   "dailyExpenseReminderChannel": "Daily expense reminder",
-  "quickAddChannel": "Quick add shortcut"
+  "quickAddChannel": "Quick add shortcut",
+  "languageSaveFailed": "Couldn't save the selected language"
 }
