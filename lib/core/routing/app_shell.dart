@@ -12,6 +12,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../data/providers.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../../data/tables.dart' show AppMode;
 import '../widgets/app_surfaces.dart';
 import '../widgets/glass_sheet.dart';
@@ -30,6 +31,24 @@ import '../theme/glass.dart';
 import '../widgets/nav_bar_inset.dart';
 
 part 'glass_chrome.dart';
+
+/// Labels are localized at render time; stable navigation IDs remain English.
+String localizedNavLabel(BuildContext context, String english) {
+  final l10n = AppLocalizations.of(context);
+  return switch (english) {
+    'Dashboard' => l10n.dashboardTitle,
+    'Transactions' => l10n.navTransactions,
+    'Persons' => l10n.navPersons,
+    'More' => l10n.navMore,
+    'Calendar' => l10n.calendarTitle,
+    'Budgets' => l10n.navBudgets,
+    'Accounts' => l10n.navAccounts,
+    'Stats' => l10n.navStats,
+    'Payees' => l10n.navPayees,
+    _ => english,
+  };
+}
+
 
 /// `Dashboard · slotLeft · ➕ · slotRight · More`
 ///
@@ -273,7 +292,7 @@ class AppShell extends ConsumerWidget {
             if (showLabels) ...[
               const SizedBox(height: 4),
               Text(
-                tab.label,
+                localizedNavLabel(context, tab.label),
                 style: theme.textTheme.labelSmall?.copyWith(
                   color: color,
                   fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
@@ -475,8 +494,8 @@ class _AddButtonState extends State<_AddButton> {
           backdrop: false,
           tint: Theme.of(context).colorScheme.secondary,
           // A tooltip would claim the long press the hold menu needs.
-          tooltip: widget.holdEnabled ? null : 'Add',
-          semanticLabel: 'Add',
+          tooltip: widget.holdEnabled ? null : AppLocalizations.of(context).navAdd,
+          semanticLabel: AppLocalizations.of(context).navAdd,
           onPressed: _open,
           child: const AppIcon(
             CupertinoIcons.add,
@@ -707,7 +726,7 @@ class _GlassQuickActionsState extends State<_GlassQuickActions>
     final open = _open.value.clamp(0.0, 1.0);
     final text = hovered >= 0
         ? widget.actions[hovered].label
-        : 'Slide to an action · release on × to cancel';
+        : AppLocalizations.of(context).navSlideToAction;
     final at = hovered >= 0
         ? widget.centres[hovered] - const Offset(0, _bubble * 0.95)
         : widget.anchor - const Offset(140, 270);
@@ -850,7 +869,7 @@ class _HoldMenuOverlay extends StatelessWidget {
   Widget _label(BuildContext context, Offset center, double radius, int i) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
-    final text = i == -1 ? 'Release to cancel' : actions[i]!.label;
+    final text = i == -1 ? AppLocalizations.of(context).navReleaseToCancel : actions[i]!.label;
     return Positioned(
       left: 16,
       right: 16,
@@ -1138,7 +1157,7 @@ class _LiquidTab extends StatelessWidget {
     return Semantics(
       selected: selected,
       button: true,
-      label: tab.label,
+      label: localizedNavLabel(context, tab.label),
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: onTap,
@@ -1158,7 +1177,7 @@ class _LiquidTab extends StatelessWidget {
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
-                    tab.label,
+                    localizedNavLabel(context, tab.label),
                     maxLines: 1,
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: color,
@@ -1234,7 +1253,8 @@ class _TopBar extends ConsumerWidget implements PreferredSizeWidget {
           child: child,
         ),
       ),
-      child: Text(_titles[currentIndex], key: ValueKey(currentIndex)),
+      child: Text(localizedNavLabel(context, _titles[currentIndex]),
+          key: ValueKey('${currentIndex}_${Localizations.localeOf(context)}')),
     );
 
     return DecoratedBox(
@@ -1263,13 +1283,13 @@ class _TopBar extends ConsumerWidget implements PreferredSizeWidget {
                 // that trailing slot there instead.
                 if (currentIndex == 2)
                   _TonalIconButton(
-                    tooltip: 'Settled',
+                    tooltip: AppLocalizations.of(context).navSettled,
                     icon: const AppIcon(Icons.task_alt_rounded),
                     onPressed: () => context.push('/persons/settled'),
                   )
                 else
                   _TonalIconButton(
-                    tooltip: 'Review Inbox',
+                    tooltip: AppLocalizations.of(context).navReviewInbox,
                     icon: const AppIcon(Icons.inbox_outlined),
                     onPressed: () => context.push('/inbox'),
                   ),
@@ -1292,7 +1312,7 @@ class _TopBar extends ConsumerWidget implements PreferredSizeWidget {
           const _DashboardMonthButton(),
           const SizedBox(width: 4),
           _TonalIconButton(
-            tooltip: 'About ${AppInfo.name}',
+            tooltip: AppLocalizations.of(context).navAbout(AppInfo.name),
             icon: const BrandMark(size: 22),
             onPressed: () => _pushFromTop(context, '/more/about'),
           ),
@@ -1303,13 +1323,13 @@ class _TopBar extends ConsumerWidget implements PreferredSizeWidget {
       case 2: // Persons
         return [
           _TonalIconButton(
-            tooltip: 'Archived',
+            tooltip: AppLocalizations.of(context).navArchived,
             icon: const AppIcon(Icons.inventory_2_outlined),
             onPressed: () => _pushFromTop(context, '/persons/archived'),
           ),
           const SizedBox(width: 4),
           _TonalIconButton(
-            tooltip: 'Add person',
+            tooltip: AppLocalizations.of(context).navAddPerson,
             icon: const AppIcon(Icons.person_add_alt_1_outlined),
             onPressed: () => showAddPersonDialog(context, ref),
           ),
@@ -1318,14 +1338,14 @@ class _TopBar extends ConsumerWidget implements PreferredSizeWidget {
       case 4: // Calendar
         return [
           _TonalIconButton(
-            tooltip: 'Today',
+            tooltip: AppLocalizations.of(context).navToday,
             icon: const AppIcon(Icons.today_rounded),
             onPressed: () =>
                 ref.read(calendarGoToTodaySignalProvider.notifier).state++,
           ),
           const SizedBox(width: 4),
           _TonalIconButton(
-            tooltip: 'New reminder',
+            tooltip: AppLocalizations.of(context).navNewReminder,
             icon: const AppIcon(Icons.add_rounded),
             onPressed: () =>
                 ref.read(calendarNewReminderSignalProvider.notifier).state++,
@@ -1462,7 +1482,7 @@ class _DashboardMonthButton extends ConsumerWidget {
       return SizedBox(
         height: 42,
         child: GlassButton(
-          tooltip: 'Change month',
+          tooltip: AppLocalizations.of(context).navChangeMonth,
           backdrop: false,
           onPressed: pick,
           child: Center(widthFactor: 1, child: label),
@@ -1498,7 +1518,7 @@ class _TransactionsBarActions extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _TonalIconButton(
-          tooltip: 'Filters',
+          tooltip: AppLocalizations.of(context).navFilters,
           icon: AnimatedSwitcher(
             duration: const Duration(milliseconds: 200),
             transitionBuilder: (child, animation) =>
@@ -1514,7 +1534,7 @@ class _TransactionsBarActions extends ConsumerWidget {
         ),
         const SizedBox(width: 4),
         _TonalIconButton(
-          tooltip: searchActive ? 'Close search' : 'Search',
+          tooltip: searchActive ? AppLocalizations.of(context).navCloseSearch : AppLocalizations.of(context).navSearch,
           icon: AnimatedSwitcher(
             duration: const Duration(milliseconds: 200),
             transitionBuilder: (child, animation) => ScaleTransition(
