@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/platform/platform_features.dart';
+import '../../core/localization/app_locale_controller.dart';
+import '../../core/localization/language_picker.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../../core/widgets/app_surfaces.dart';
 import '../../data/providers.dart';
 import 'more_screen_layout_sheet.dart';
@@ -16,6 +19,8 @@ class GeneralSettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final locale = ref.watch(appLocaleProvider).locale;
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     final trailingStyle = settingsTrailingStyle(context);
@@ -27,7 +32,7 @@ class GeneralSettingsScreen extends ConsumerWidget {
     final showCalendarDayTotals = ref.watch(showCalendarDayTotalsProvider);
 
     return Scaffold(
-      appBar: AppTopBar(title: const Text('General')),
+      appBar: AppTopBar(title: Text(l10n.generalTitle)),
       body: ListView(
         // Explicit padding drops ListView's nav-bar inset; re-add it (#137).
         padding: EdgeInsets.fromLTRB(
@@ -43,7 +48,7 @@ class GeneralSettingsScreen extends ConsumerWidget {
                 AppListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   leading: const AppIcon(Icons.payments_outlined),
-                  title: const Text('Currency'),
+                  title: Text(l10n.currencyTitle),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -61,15 +66,36 @@ class GeneralSettingsScreen extends ConsumerWidget {
                   onTap: () => context.push('/more/settings/currency'),
                 ),
                 Divider(height: 1, indent: 60, color: cs.outline),
+                AppListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                  leading: const AppIcon(Icons.language_rounded),
+                  title: Text(l10n.languageTitle),
+                  subtitle: Text(l10n.languageSubtitle),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        locale == null
+                            ? l10n.followSystemLanguage
+                            : nativeLocaleLabel(locale),
+                        style: trailingStyle,
+                      ),
+                      const SizedBox(width: 4),
+                      AppIcon(Icons.chevron_right_rounded,
+                          color: cs.onSurfaceVariant),
+                    ],
+                  ),
+                  onTap: () => showLanguagePicker(context),
+                ),
+                Divider(height: 1, indent: 60, color: cs.outline),
                 AppSwitchListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   secondary: const AppIcon(Icons.attach_money_rounded),
-                  title: const Text('Show currency symbol'),
+                  title: Text(l10n.showCurrencySymbolTitle),
                   subtitle: Text(
                     showSymbol
-                        ? 'Amounts show ${currency.symbol}'
-                        : 'Amounts show plain numbers — use this if your '
-                              'currency symbol is missing',
+                        ? l10n.showCurrencySymbolOn(currency.symbol)
+                        : l10n.showCurrencySymbolOff,
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: cs.onSurfaceVariant,
                     ),
@@ -82,7 +108,7 @@ class GeneralSettingsScreen extends ConsumerWidget {
                 AppListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   leading: AppIcon(themeChoice.style.icon),
-                  title: const Text('Theme'),
+                  title: Text(l10n.themeTitle),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -100,9 +126,9 @@ class GeneralSettingsScreen extends ConsumerWidget {
                 AppListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   leading: const AppIcon(Icons.text_fields_rounded),
-                  title: const Text('Font'),
+                  title: Text(l10n.fontTitle),
                   subtitle: Text(
-                    'Text size, boldness and font family',
+                    l10n.fontSubtitle,
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: cs.onSurfaceVariant,
                     ),
@@ -117,7 +143,7 @@ class GeneralSettingsScreen extends ConsumerWidget {
                 AppListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   leading: const AppIcon(Icons.dashboard_outlined),
-                  title: const Text('More screen layout'),
+                  title: Text(l10n.moreScreenLayoutTitle),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -138,15 +164,14 @@ class GeneralSettingsScreen extends ConsumerWidget {
             ),
           ),
 
-          settingsSectionLabel(context, 'Dashboard'),
+          settingsSectionLabel(context, l10n.dashboardTitle),
           AppCard(
             child: AppListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               leading: const AppIcon(Icons.dashboard_customize_outlined),
-              title: const Text('Customize dashboard'),
+              title: Text(l10n.customizeDashboardTitle),
               subtitle: Text(
-                'Add, remove and reorder widgets, and pick what counts toward '
-                'Net Worth.',
+                l10n.customizeDashboardSubtitle,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: cs.onSurfaceVariant,
                 ),
@@ -156,15 +181,14 @@ class GeneralSettingsScreen extends ConsumerWidget {
             ),
           ),
 
-          settingsSectionLabel(context, 'Calendar'),
+          settingsSectionLabel(context, l10n.calendarTitle),
           AppCard(
             child: AppSwitchListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               secondary: const AppIcon(Icons.calendar_month_outlined),
-              title: const Text('Show day totals'),
+              title: Text(l10n.showDayTotalsTitle),
               subtitle: Text(
-                'Selecting a day on the calendar shows its money in/out '
-                'totals.',
+                l10n.showDayTotalsSubtitle,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: cs.onSurfaceVariant,
                 ),
@@ -175,14 +199,14 @@ class GeneralSettingsScreen extends ConsumerWidget {
             ),
           ),
 
-          settingsSectionLabel(context, 'Layout'),
+          settingsSectionLabel(context, l10n.layoutTitle),
           AppCard(
             child: AppListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               leading: const AppIcon(Icons.dashboard_customize_outlined),
-              title: const Text('Customize bottom nav'),
+              title: Text(l10n.customizeBottomNavTitle),
               subtitle: Text(
-                'Choose what goes next to the ➕ button',
+                l10n.customizeBottomNavSubtitle,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: cs.onSurfaceVariant,
                 ),
@@ -192,17 +216,16 @@ class GeneralSettingsScreen extends ConsumerWidget {
             ),
           ),
 
-          settingsSectionLabel(context, 'Message Capture'),
+          settingsSectionLabel(context, l10n.messageCaptureTitle),
           AppCard(
             child: Column(
               children: [
                 AppListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   leading: const AppIcon(Icons.sms_outlined),
-                  title: const Text('Bank-SMS auto-capture'),
+                  title: Text(l10n.bankSmsCaptureTitle),
                   subtitle: Text(
-                    'Coming soon — removed for now so the app installs '
-                    'without a Play Protect block.',
+                    l10n.bankSmsCaptureSubtitle,
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: cs.onSurfaceVariant,
                     ),
@@ -215,10 +238,9 @@ class GeneralSettingsScreen extends ConsumerWidget {
                   AppListTile(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                     leading: const AppIcon(Icons.rate_review_outlined),
-                    title: const Text('OCR corrections'),
+                    title: Text(l10n.ocrCorrectionsTitle),
                     subtitle: Text(
-                      'Optional — test a payment screenshot and help improve '
-                      'OCR by sharing what you find, entirely on your terms.',
+                      l10n.ocrCorrectionsSubtitle,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: cs.onSurfaceVariant,
                       ),
