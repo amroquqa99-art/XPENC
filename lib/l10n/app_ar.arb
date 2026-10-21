@@ -68,5 +68,182 @@
   "detectedTransactionsChannel": "معاملات مكتشفة",
   "dailyExpenseReminderChannel": "تذكير يومي بالمصاريف",
   "quickAddChannel": "اختصار الإضافة السريعة",
-  "languageSaveFailed": "تعذّر حفظ اللغة المختارة"
+  "languageSaveFailed": "تعذّر حفظ اللغة المختارة",
+  "budgetOverspentTitle": "تجاوزت ميزانية {category}",
+  "@budgetOverspentTitle": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetOverspentBody": "أنفقت {spent} من أصل {limit}.",
+  "@budgetOverspentBody": {
+    "placeholders": {
+      "spent": {
+        "type": "String"
+      },
+      "limit": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetNearlyUsedTitle": "ميزانية {category} على وشك النفاد",
+  "@budgetNearlyUsedTitle": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetNearlyUsedBody": "استخدمت {percent}% من ميزانية {limit}.",
+  "@budgetNearlyUsedBody": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentPayTitle": "موعد الدفع: {title}",
+  "@paymentPayTitle": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentCollectTitle": "موعد التحصيل: {title}",
+  "@paymentCollectTitle": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentDueBody": "موعد الاستحقاق {date}{amount}. لم تُسجّل أي دفعة بعد؛ أكّد الدفع من XPENC.",
+  "@paymentDueBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "detectedCount": "{count, plural, =1{تم اكتشاف معاملة واحدة} other{تم اكتشاف {count} معاملات}}",
+  "@detectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "detectedBody": "افتح التطبيق لمراجعة المعاملات وتصنيفها.",
+  "yourAccount": "حسابك",
+  "yourCard": "بطاقتك",
+  "autoExpenseTitle": "دفعة تلقائية قادمة: {name}",
+  "@autoExpenseTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "autoIncomeTitle": "دخل متوقع: {name}",
+  "@autoIncomeTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "autoExpenseBody": "سيُخصم {amount} من {account} بتاريخ {date}. تأكّد من توفر الرصيد الكافي.",
+  "@autoExpenseBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "account": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "autoIncomeBody": "من المتوقع وصول {amount} إلى {account} بتاريخ {date}.",
+  "@autoIncomeBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "account": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "creditDueTitle": "{card}: موعد السداد {date}",
+  "@creditDueTitle": {
+    "placeholders": {
+      "card": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "creditDueBody": "سدّد قبل {date} لتجنب الفوائد أو رسوم التأخير.",
+  "@creditDueBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "autoPostedCount": "{count, plural, =1{تم تسجيل معاملة تلقائية واحدة} other{تم تسجيل {count} معاملات تلقائية}}",
+  "@autoPostedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "autoPostedBody": "افتح المعاملات التلقائية لمراجعة ما تم تسجيله.",
+  "dailySpendingTitle": "سجّل مصروفات اليوم",
+  "dailySpendingBody": "دوّن مصروفات اليوم الآن حتى لا تضطر إلى تذكّرها لاحقًا.",
+  "quickAddHelp": "ردّ بمبلغ لتسجيل مصروف أو دخل.",
+  "quickAddAmountLabel": "المبلغ",
+  "quickAddInvalidAmount": "المبلغ غير صالح؛ لم تُسجّل أي معاملة.",
+  "quickAddNoAccount": "لا يوجد حساب متاح؛ لم تُسجّل أي معاملة.",
+  "quickAddExpenseSuccess": "تم تسجيل مصروف بقيمة {amount} في {account}.",
+  "@quickAddExpenseSuccess": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "account": {
+        "type": "String"
+      }
+    }
+  },
+  "quickAddIncomeSuccess": "تم تسجيل دخل بقيمة {amount} في {account}.",
+  "@quickAddIncomeSuccess": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "account": {
+        "type": "String"
+      }
+    }
+  },
+  "quickAddSaveFailed": "تعذّر حفظ المعاملة؛ لم يُسجّل أي مبلغ."
 }
