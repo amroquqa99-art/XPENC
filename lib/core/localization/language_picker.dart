@@ -35,7 +35,7 @@ Future<void> showLanguagePicker(BuildContext context) async {
           for (final locale in AppLocalizations.supportedLocales)
             RadioListTile<String>(
               title: Text(nativeLocaleLabel(locale)),
-              value: locale.languageCode,
+              value: localeIdentifier(locale),
               groupValue: selected,
               onChanged: (value) => Navigator.pop(sheetContext, value),
             ),
