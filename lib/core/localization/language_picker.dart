@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../../l10n/generated/app_localizations.dart';
@@ -50,7 +52,7 @@ Future<void> showLanguagePicker(BuildContext context) async {
   } on FileSystemException catch (_) {
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Unable to save language preference')),
+      SnackBar(content: Text(AppLocalizations.of(context).languageSaveFailed)),
     );
   }
 }
