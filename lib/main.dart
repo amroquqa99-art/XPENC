@@ -5,9 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app.dart';
 import 'core/theme/glass.dart';
+import 'core/localization/app_locale_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await appLocaleController.load();
   // Inter ships under the SIL OFL, which asks for its licence to travel
   // with the font — it shows in About → Licences.
   LicenseRegistry.addLicense(() async* {
