@@ -6,6 +6,8 @@ import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../../data/database.dart';
+import '../../l10n/generated/app_localizations.dart';
+import '../localization/app_locale_controller.dart';
 import '../../data/tables.dart';
 import '../money.dart';
 import '../platform/platform_features.dart';
@@ -16,6 +18,10 @@ class NotificationService {
 
   final AppDatabase _db;
   final _plugin = FlutterLocalNotificationsPlugin();
+
+  Future<AppLocalizations> _strings() => AppLocalizations.delegate.load(
+    appLocaleController.locale ?? WidgetsBinding.instance.platformDispatcher.locale,
+  );
   var _ready = false;
 
   static const _budgetChannel = AndroidNotificationChannel(
@@ -173,6 +179,7 @@ class NotificationService {
   /// Only expenses count. Transfers and person movements are excluded upstream
   /// by `watchSpendByCategory`, which is what makes these numbers trustworthy.
   Future<void> checkBudgets() async {
+    final l10n = await _strings();
     final settings = await _db.getSettings();
     if (!settings.notificationsEnabled) return;
 
@@ -207,10 +214,8 @@ class NotificationService {
           periodKey: periodKey,
           level: AlertLevel.overspent,
           id: 100000 + b.categoryId,
-          title: 'Overspent on ${category.name}',
-          body:
-              'You have spent ${MoneyFormat.symbol(spent)} of '
-              '${MoneyFormat.symbol(b.amount)}.',
+          title: l10n.budgetOverspentTitle(category.name),
+          body: l10n.budgetOverspentBody(MoneyFormat.symbol(spent), MoneyFormat.symbol(b.amount)),
         );
       } else if (pct >= b.alertThresholdPct / 100) {
         await _fireOnce(
@@ -218,9 +223,8 @@ class NotificationService {
           periodKey: periodKey,
           level: AlertLevel.threshold,
           id: 200000 + b.categoryId,
-          title: '${category.name} budget almost used',
-          body:
-              '${(pct * 100).round()}% of ${MoneyFormat.symbol(b.amount)} spent.',
+          title: l10n.budgetNearlyUsedTitle(category.name),
+          body: l10n.budgetNearlyUsedBody((pct * 100).round(), MoneyFormat.symbol(b.amount)),
         );
       }
     }
@@ -258,6 +262,7 @@ class NotificationService {
 
   /// Reschedules every open reminder. Safe to call on every app start.
   Future<void> syncReminders() async {
+    final l10n = await _strings();
     if (!_ready) return;
     final settings = await _db.getSettings();
     final all = await _db.watchReminders().first;
@@ -273,15 +278,15 @@ class NotificationService {
       final amount = r.amount == null
           ? ''
           : ' — ${MoneyFormat.symbol(r.amount!)}';
-      final verb = r.direction == ReminderDirection.pay ? 'Pay' : 'Collect';
+      final title = r.direction == ReminderDirection.pay
+          ? l10n.paymentPayTitle(r.title)
+          : l10n.paymentCollectTitle(r.title);
 
       try {
         await _plugin.zonedSchedule(
           id: _reminderId(r.id),
-          title: '$verb: ${r.title}',
-          body:
-              'Due ${_dayLabel(r.dueDate)}$amount. Nothing has been posted — '
-              'confirm it in the app.',
+          title: title,
+          body: l10n.paymentDueBody(_dayLabel(r.dueDate), amount),
           scheduledDate: tz.TZDateTime.from(fireAt, tz.local),
           notificationDetails: _details(_reminderChannel),
           // Inexact avoids needing SCHEDULE_EXACT_ALARM. A bill reminder does
@@ -344,13 +349,14 @@ class NotificationService {
   // ── Capture ───────────────────────────────────────────────────────────────
 
   Future<void> notifyDetected(int count) async {
+    final l10n = await _strings();
     if (count <= 0) return;
     final settings = await _db.getSettings();
     if (!settings.notificationsEnabled) return;
     await _show(
       400000,
-      count == 1 ? '1 transaction detected' : '$count transactions detected',
-      'Open the app to review and categorise.',
+      l10n.detectedCount(count),
+      l10n.detectedBody,
       _captureChannel,
     );
   }
@@ -362,6 +368,7 @@ class NotificationService {
   /// advances each rule's `nextDueDate` — this always reads that fresh value,
   /// so it never warns about an occurrence that already posted.
   Future<void> syncRecurringNotifications() async {
+    final l10n = await _strings();
     if (!_ready) return;
     final settings = await _db.getSettings();
     final rules = await _db.watchRecurringRules().first;
@@ -374,16 +381,14 @@ class NotificationService {
       if (fireAt == null) continue;
 
       final account = await _db.watchAccount(r.accountId).first;
-      final accountName = account?.name ?? 'your account';
+      final accountName = account?.name ?? l10n.yourAccount;
       final isExpense = r.kind == CategoryKind.expense;
       final title = isExpense
-          ? '${r.name}: auto-pay coming up'
-          : '${r.name}: expected soon';
+          ? l10n.autoExpenseTitle(r.name)
+          : l10n.autoIncomeTitle(r.name);
       final body = isExpense
-          ? '${MoneyFormat.symbol(r.amount)} will be auto-deducted from '
-                '$accountName on ${_dayLabel(r.nextDueDate)}. Keep that much ready.'
-          : '${MoneyFormat.symbol(r.amount)} is expected in $accountName '
-                'on ${_dayLabel(r.nextDueDate)}.';
+          ? l10n.autoExpenseBody(MoneyFormat.symbol(r.amount), accountName, _dayLabel(r.nextDueDate))
+          : l10n.autoIncomeBody(MoneyFormat.symbol(r.amount), accountName, _dayLabel(r.nextDueDate));
 
       try {
         await _plugin.zonedSchedule(
@@ -432,6 +437,7 @@ class NotificationService {
   /// always recomputed fresh from [AppDatabase.creditCardNextDueDate], so a
   /// sync after the due date has passed naturally schedules the *next* one.
   Future<void> syncCreditCardReminders() async {
+    final l10n = await _strings();
     if (!_ready) return;
     final settings = await _db.getSettings();
     final details = await _db.allCreditCardDetails();
@@ -449,14 +455,13 @@ class NotificationService {
       if (fireAt == null) continue;
 
       final account = await _db.watchAccount(d.accountId).first;
-      final cardName = account?.name ?? 'your card';
+      final cardName = account?.name ?? l10n.yourCard;
 
       try {
         await _plugin.zonedSchedule(
           id: _creditCardReminderId(d.accountId),
-          title: '$cardName: payment due ${_dayLabel(dueDate)}',
-          body:
-              'Pay by ${_dayLabel(dueDate)} to avoid interest or a late fee.',
+          title: l10n.creditDueTitle(cardName, _dayLabel(dueDate)),
+          body: l10n.creditDueBody(_dayLabel(dueDate)),
           scheduledDate: tz.TZDateTime.from(fireAt, tz.local),
           notificationDetails: _details(_reminderChannel),
           androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
@@ -495,15 +500,14 @@ class NotificationService {
   /// One-shot confirmation after [AppDatabase.runDueRecurringRules] posts
   /// something — nothing about "auto" should ever land in the ledger silently.
   Future<void> notifyAutoPosted(int count) async {
+    final l10n = await _strings();
     if (count <= 0) return;
     final settings = await _db.getSettings();
     if (!settings.notificationsEnabled) return;
     await _show(
       500000,
-      count == 1
-          ? '1 auto-transaction posted'
-          : '$count auto-transactions posted',
-      'Open Auto to review what was posted.',
+      l10n.autoPostedCount(count),
+      l10n.autoPostedBody,
       _autoChannel,
     );
   }
@@ -516,6 +520,7 @@ class NotificationService {
   /// is what makes `zonedSchedule` re-fire every day instead of once. Safe to
   /// call on every app start/resume, same as the other `sync*` methods.
   Future<void> syncExpenseReminder() async {
+    final l10n = await _strings();
     if (!_ready) return;
     await _cancel(_expenseNudgeId);
 
@@ -540,8 +545,8 @@ class NotificationService {
     try {
       await _plugin.zonedSchedule(
         id: _expenseNudgeId,
-        title: 'Log today\'s spending',
-        body: "A minute now beats reconstructing it from memory later.",
+        title: l10n.dailySpendingTitle,
+        body: l10n.dailySpendingBody,
         scheduledDate: fireAt,
         notificationDetails: _details(_expenseNudgeChannel),
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
@@ -567,6 +572,7 @@ class NotificationService {
   /// (see [requestPermission]), so a shortcut nobody granted permission for
   /// would just silently fail to show.
   Future<void> syncQuickAddNotification() async {
+    final l10n = await _strings();
     if (!_ready) return;
     final settings = await _db.getSettings();
     if (!PlatformFeatures.quickAddNotification ||
@@ -579,8 +585,8 @@ class NotificationService {
     try {
       await _plugin.show(
         id: _quickAddId,
-        title: 'Quick add',
-        body: 'Reply with an amount to log an expense or income.',
+        title: l10n.quickAddTitle,
+        body: l10n.quickAddHelp,
         notificationDetails: NotificationDetails(
           android: AndroidNotificationDetails(
             _quickAddChannel.id,
@@ -594,18 +600,18 @@ class NotificationService {
             // back off, and a swipe shouldn't quietly disable the feature.
             ongoing: true,
             autoCancel: false,
-            actions: const [
+            actions: [
               AndroidNotificationAction(
                 _quickAddExpenseAction,
-                'Add expense',
+                l10n.addExpenseAction,
                 cancelNotification: false,
-                inputs: [AndroidNotificationActionInput(label: 'Amount')],
+                inputs: [AndroidNotificationActionInput(label: l10n.quickAddAmountLabel)],
               ),
               AndroidNotificationAction(
                 _quickAddIncomeAction,
-                'Add income',
+                l10n.addIncomeAction,
                 cancelNotification: false,
-                inputs: [AndroidNotificationActionInput(label: 'Amount')],
+                inputs: [AndroidNotificationActionInput(label: l10n.quickAddAmountLabel)],
               ),
             ],
           ),
@@ -647,6 +653,10 @@ Future<void> _handleQuickAddReply(NotificationResponse response) async {
   if (type == null) return;
 
   WidgetsFlutterBinding.ensureInitialized();
+  try { await appLocaleController.load(); } catch (_) { /* system fallback */ }
+  final l10n = await AppLocalizations.delegate.load(
+    appLocaleController.locale ?? WidgetsBinding.instance.platformDispatcher.locale,
+  );
   final plugin = FlutterLocalNotificationsPlugin();
   await plugin.initialize(
     settings: const InitializationSettings(
@@ -656,7 +666,7 @@ Future<void> _handleQuickAddReply(NotificationResponse response) async {
 
   Future<void> result(String body) => plugin.show(
     id: NotificationService._quickAddResultId,
-    title: 'Quick add',
+    title: l10n.quickAddTitle,
     body: body,
     notificationDetails: NotificationDetails(
       android: AndroidNotificationDetails(
@@ -673,7 +683,7 @@ Future<void> _handleQuickAddReply(NotificationResponse response) async {
 
   final amount = Money.tryParse(response.input ?? '');
   if (amount == null || !amount.isPositive) {
-    await result("Couldn't read that as an amount — nothing was added.");
+    await result(l10n.quickAddInvalidAmount);
     return;
   }
 
@@ -681,7 +691,7 @@ Future<void> _handleQuickAddReply(NotificationResponse response) async {
   try {
     final accountId = await db.resolveQuickAddAccountId();
     if (accountId == null) {
-      await result('No account to post to — nothing was added.');
+      await result(l10n.quickAddNoAccount);
       return;
     }
     await db.addTransaction(
@@ -691,12 +701,11 @@ Future<void> _handleQuickAddReply(NotificationResponse response) async {
       date: DateTime.now(),
     );
     final account = await db.watchAccount(accountId).first;
-    await result(
-      '${type == TxType.expense ? 'Expense' : 'Income'} of '
-      '${MoneyFormat.symbol(amount)} added to ${account?.name ?? 'your account'}.',
-    );
+    await result(type == TxType.expense
+        ? l10n.quickAddExpenseSuccess(MoneyFormat.symbol(amount), account?.name ?? l10n.yourAccount)
+        : l10n.quickAddIncomeSuccess(MoneyFormat.symbol(amount), account?.name ?? l10n.yourAccount));
   } catch (e) {
-    await result("Couldn't save that — nothing was added.");
+    await result(l10n.quickAddSaveFailed);
     debugPrint('quick add background insert failed: $e');
   } finally {
     await db.close();
