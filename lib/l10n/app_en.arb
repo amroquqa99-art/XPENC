@@ -68,5 +68,182 @@
   "detectedTransactionsChannel": "Detected transactions",
   "dailyExpenseReminderChannel": "Daily expense reminder",
   "quickAddChannel": "Quick add shortcut",
-  "languageSaveFailed": "Couldn't save the selected language"
+  "languageSaveFailed": "Couldn't save the selected language",
+  "budgetOverspentTitle": "Over budget: {category}",
+  "@budgetOverspentTitle": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetOverspentBody": "Spent {spent} out of {limit}.",
+  "@budgetOverspentBody": {
+    "placeholders": {
+      "spent": {
+        "type": "String"
+      },
+      "limit": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetNearlyUsedTitle": "{category} budget is almost exhausted",
+  "@budgetNearlyUsedTitle": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetNearlyUsedBody": "{percent}% of {limit} spent.",
+  "@budgetNearlyUsedBody": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentPayTitle": "Pay: {title}",
+  "@paymentPayTitle": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentCollectTitle": "Collect: {title}",
+  "@paymentCollectTitle": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentDueBody": "Due {date}{amount}. No payment has been recorded yet — confirm it in XPENC.",
+  "@paymentDueBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "detectedCount": "{count, plural, =1{1 transaction detected} other{{count} transactions detected}}",
+  "@detectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "detectedBody": "Open the app to review and categorize.",
+  "yourAccount": "your account",
+  "yourCard": "your card",
+  "autoExpenseTitle": "Upcoming automatic payment: {name}",
+  "@autoExpenseTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "autoIncomeTitle": "Expected income: {name}",
+  "@autoIncomeTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "autoExpenseBody": "{amount} will be charged to {account} on {date}. Keep sufficient funds available.",
+  "@autoExpenseBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "account": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "autoIncomeBody": "{amount} is expected in {account} on {date}.",
+  "@autoIncomeBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "account": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "creditDueTitle": "{card}: payment due {date}",
+  "@creditDueTitle": {
+    "placeholders": {
+      "card": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "creditDueBody": "Pay by {date} to avoid interest or late fees.",
+  "@creditDueBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "autoPostedCount": "{count, plural, =1{1 automatic transaction recorded} other{{count} automatic transactions recorded}}",
+  "@autoPostedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "autoPostedBody": "Open automatic transactions to review the entries.",
+  "dailySpendingTitle": "Record today's spending",
+  "dailySpendingBody": "دوّن مصروفات اليوم الآن حتى لا تضطر إلى تذكّرها لاحقًا.",
+  "quickAddHelp": "Reply with an amount to record an expense or income.",
+  "quickAddAmountLabel": "Amount",
+  "quickAddInvalidAmount": "The amount isn't valid — nothing was recorded.",
+  "quickAddNoAccount": "No account is available — nothing was recorded.",
+  "quickAddExpenseSuccess": "Expense of {amount} recorded in {account}.",
+  "@quickAddExpenseSuccess": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "account": {
+        "type": "String"
+      }
+    }
+  },
+  "quickAddIncomeSuccess": "Income of {amount} recorded in {account}.",
+  "@quickAddIncomeSuccess": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "account": {
+        "type": "String"
+      }
+    }
+  },
+  "quickAddSaveFailed": "Couldn't save the transaction — nothing was recorded."
 }
