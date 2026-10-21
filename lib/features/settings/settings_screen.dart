@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/branding/app_info.dart';
 import '../../core/branding/brand_mark.dart';
 import '../../core/platform/platform_features.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../../core/widgets/app_surfaces.dart';
 
 /// Settings' front door — a menu of modules, each its own page. Splitting it
@@ -15,8 +16,9 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppTopBar(title: const Text('Settings')),
+      appBar: AppTopBar(title: Text(l10n.settingsTitle)),
       body: ListView(
         // Explicit padding drops ListView's nav-bar inset; re-add it (#137).
         padding: EdgeInsets.fromLTRB(
@@ -28,57 +30,57 @@ class SettingsScreen extends StatelessWidget {
         children: [
           _ModuleTile(
             icon: Icons.tune_rounded,
-            title: 'General',
-            subtitle: 'Currency, theme, font, dashboard layout',
+            title: l10n.generalTitle,
+            subtitle: l10n.generalSubtitle,
             onTap: () => context.push('/more/settings/general'),
           ),
           _ModuleTile(
             icon: Icons.savings_outlined,
-            title: 'Mode & Budgeting',
-            subtitle: 'App mode, budget cycle, Ready to Assign',
+            title: l10n.budgetSettingsTitle,
+            subtitle: l10n.budgetSettingsSubtitle,
             onTap: () => context.push('/more/settings/mode-budgeting'),
           ),
           _ModuleTile(
             icon: Icons.people_outline,
-            title: 'Persons',
-            subtitle: 'Repayments and your payment methods',
+            title: l10n.personsTitle,
+            subtitle: l10n.personsSubtitle,
             onTap: () => context.push('/more/settings/persons'),
           ),
           _ModuleTile(
             icon: Icons.security_outlined,
-            title: 'Security & Privacy',
+            title: l10n.securityPrivacyTitle,
             subtitle: PlatformFeatures.screenshotBlocking
-                ? 'PIN, recovery phrase, authenticator, screenshots'
-                : 'PIN, recovery phrase, authenticator',
+                ? l10n.securityPrivacySubtitle
+                : l10n.securityPrivacySubtitleBasic,
             onTap: () => context.push('/more/settings/security'),
           ),
           if (PlatformFeatures.permissionsScreen)
             _ModuleTile(
               icon: Icons.verified_user_outlined,
-              title: 'Permissions',
-              subtitle: 'What XPENC can access — turn each on or off',
+              title: l10n.permissionsTitle,
+              subtitle: l10n.permissionsSubtitle,
               onTap: () => context.push('/more/settings/permissions'),
             ),
           _ModuleTile(
             icon: Icons.notifications_outlined,
-            title: 'Notifications',
+            title: l10n.notificationsTitle,
             subtitle: PlatformFeatures.quickAddNotification
-                ? 'Reminders and quick add from a notification'
-                : 'Reminders',
+                ? l10n.notificationsSubtitle
+                : l10n.remindersTitle,
             onTap: () => context.push('/more/settings/notifications'),
           ),
           _ModuleTile(
             icon: Icons.flash_on_outlined,
-            title: 'Quick Actions',
+            title: l10n.quickActionsTitle,
             subtitle: PlatformFeatures.homeWidgets
-                ? 'Hold ➕ shortcuts, home screen widgets'
-                : 'Hold ➕ shortcuts',
+                ? l10n.quickActionsSubtitle
+                : l10n.quickActionsSubtitleBasic,
             onTap: () => context.push('/more/settings/quick-actions'),
           ),
           _ModuleTile(
             icon: Icons.storage_outlined,
-            title: 'Data',
-            subtitle: 'Recalculate balances, clear all data',
+            title: l10n.dataTitle,
+            subtitle: l10n.dataSubtitle,
             onTap: () => context.push('/more/settings/data'),
           ),
           AppCard(
@@ -87,7 +89,7 @@ class SettingsScreen extends StatelessWidget {
               leading: const BrandMark(size: 34),
               title: const Text('${AppInfo.name} · ${AppInfo.version}'),
               subtitle: Text(
-                'Developer, links and build info',
+                l10n.aboutSubtitle,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
