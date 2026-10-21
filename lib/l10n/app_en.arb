@@ -218,7 +218,7 @@
   },
   "autoPostedBody": "Open automatic transactions to review the entries.",
   "dailySpendingTitle": "Record today's spending",
-  "dailySpendingBody": "دوّن مصروفات اليوم الآن حتى لا تضطر إلى تذكّرها لاحقًا.",
+  "dailySpendingBody": "A minute spent logging today's purchases saves guesswork later.",
   "quickAddHelp": "Reply with an amount to record an expense or income.",
   "quickAddAmountLabel": "Amount",
   "quickAddInvalidAmount": "The amount isn't valid — nothing was recorded.",
